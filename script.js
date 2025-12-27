@@ -12,6 +12,10 @@ const totalExpense = document.getElementById('total-expenses');
 const balance = document.getElementById('total-savings');
 const transactionHistory = document.getElementById('transaction-history');
 const savedData = localStorage.getItem("transactions");
+let visibleTransactionscount = 5;
+const loadMoreBtn = document.getElementById('load-more');
+let selectedCategory = null;
+const categoryButtons = document.querySelectorAll('#food-btn, #transport-btn, #entertainment-btn, #others-btn');
 
 if (savedData) {
     transactions = JSON.parse(savedData);
@@ -40,6 +44,7 @@ incomebtn.addEventListener("click", function () {
     };
     transactions.push(transaction);
     localStorage.setItem("transactions", JSON.stringify(transactions));
+    visibleTransactionscount = 5;
     incomeAmount.value = '';
     incomeDate.value = '';
     incomeDesc.value = '';
@@ -59,14 +64,24 @@ expensebtn.addEventListener("click", function () {
         alert("Fill all fields");
         return;
     }
+    if (selectedCategory === null) {
+    alert("Please select a category");
+    return;
+    }
     const transaction = {
         type: 'expense',
         amount: amount,
         date: date,
-        description: description
+        description: description,
+        category: selectedCategory
     };
     transactions.push(transaction);
     localStorage.setItem("transactions", JSON.stringify(transactions));
+    selectedCategory = null;
+    for (let i = 0; i < categoryButtons.length; i++) {
+        categoryButtons[i].classList.remove("active");
+    }
+    visibleTransactionscount = 5;
     expenseAmount.value = '';
     expenseDate.value = '';
     expenseDesc.value = '';
@@ -95,7 +110,7 @@ function getTransactionhistory() {
     let count = 0;
 
     for (let i = transactions.length - 1; i >= 0; i--) {
-        if (count === 7) {
+        if (count === visibleTransactionscount) {
             break;
         }
         const t = transactions[i];
@@ -103,10 +118,47 @@ function getTransactionhistory() {
         if (t.type === 'income') {
             item.textContent = `Income: ₹${t.amount} | Date: ${t.date} | Description: ${t.description}`;
         } else {
-            item.textContent = `Expense: ₹${t.amount} | Date: ${t.date} | Description: ${t.description}`;
+            item.textContent = `Expense: ₹${t.amount} | Date: ${t.date} | Description: ${t.description} | Category: ${t.category}`;
         }
         transactionHistory.appendChild(item);
         count++;
     }
+    if (visibleTransactionscount >= transactions.length) {
+        loadMoreBtn.style.display = "none";
+    } else {
+        loadMoreBtn.style.display = "block";
+    }
+}
 
+loadMoreBtn.addEventListener("click", function () {
+    visibleTransactionscount += 10;
+    getTransactionhistory();
+})
+
+for (let i = 0; i < categoryButtons.length; i++) {
+    categoryButtons[i].addEventListener("click", function () {
+        if (categoryButtons[i].classList.contains("active")) {
+            categoryButtons[i].classList.remove("active");
+            selectedCategory = null;
+            return;
+        }
+
+        for (let j = 0; j < categoryButtons.length; j++) {
+            categoryButtons[j].classList.remove("active");
+        }
+
+        categoryButtons[i].classList.add("active");
+
+        if (categoryButtons[i].id === "food-btn") {
+            selectedCategory = "Food";
+        } else if (categoryButtons[i].id === "transport-btn") {
+            selectedCategory = "Transport";
+        } else if (categoryButtons[i].id === "entertainment-btn") {
+            selectedCategory = "Entertainment";
+        } else if (categoryButtons[i].id === "others-btn") {
+            selectedCategory = "Misc";
+        }
+
+        console.log("Selected category:", selectedCategory);
+    });
 }
