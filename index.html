@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal_Finance_Dashboard</title>
+</head>
+<body>
+    <section>
+        <h1>Welcome to Your Personal Finance Dashboard</h1>
+        <p>Track your income, expenses, and savings all in one place.</p>
+    </section>
+    <section>
+        <h2>Add Income</h2>
+        <input 
+            type = "number"
+            placeholder="Enter Income"
+            id = "income-amount"
+            />
+            <button id  = "add-income-btn"> Add Income</button>
+    </section>
+
+    <section>
+        <div id="expenses">
+        <h2>Add Expense</h2>
+        <input 
+            type = "number"
+            placeholder="Enter Expense"
+            id = "expense-amount"
+            />
+        <input 
+            type = "date"
+            id = "expense-date"
+            />
+        <input 
+            type = "text"
+            placeholder="Enter Expense Description"
+            id = "expense-description"
+            />
+        <button id  = "add-expense-btn"> Add Expense</button>
+        </div>
+    </section>
+    <section>
+        <h3>Check Your total income</h3>
+        <button id = "check-income-btn"> Check Income</button>
+    </section>
+     <section>
+        <h3>Check Your total expense</h3>
+        <button id = "check-expense-btn"> Check Expense</button>
+    </section>
+     <section>
+        <h3>Check Your Remaining balance</h3>
+        <button id = "check-Remainingbalance-btn"> Check Balance</button>
+    </section>
+
+    <script src = "script.js"></script>
+</body>
+</html>
