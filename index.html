@@ -1,71 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal_Finance_Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Finance Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-    <body>
-  <div class="app-container">
-    <section>
-        <h1>Welcome to Your Personal Finance Dashboard</h1>
-        <p>Track your income, expenses, and savings all in one place.</p>
-    </section>
-    <section>
-        <h2>Add Income</h2>
-        <input type="number" placeholder="Enter Income" id="income-amount" />
-        <input type="date" id="income-date" />
-        <input type="text" placeholder="Description" id="income-description" />
-        <button id="add-income-btn"> Add Income</button>
-    </section>
+  <div class="dashboard">
 
-    <section>
-        <div id="expenses">
-            <h2>Add Expense</h2>
-            <input type="number" placeholder="Enter Expense" id="expense-amount" />
-            <input type="date" id="expense-date" />
-            <input type="text" placeholder="Description" id="expense-description" />
-            <button id="add-expense-btn"> Add Expense</button>
-            <div>
-                <h4>Expense Category</h4>
-                <button id ="food-btn">Food</button>
-                <button id ="transport-btn">Transport</button>
-                <button id ="entertainment-btn">Entertainment</button>
-                <button id ="others-btn">Miscellaneous</button>
-            </div>
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <h2>💰 Personal Finance Dashboard</h2>
+      <button class="profile-btn">👤</button>
+    </header>
+
+    <div class="content">
+
+      <!-- LEFT QUICK ACTIONS -->
+      <aside class="sidebar">
+        <h3>Quick Actions</h3>
+        <button id="add-income-btn">+ Add Income</button>
+        <button id="add-expense-btn">+ Add Expense</button>
+      </aside>
+
+      <!-- MAIN GRID -->
+      <main class="main">
+
+        <div class="card">
+          <h3>Account Summary</h3>
+          <p>Income: ₹<span id="total-income">0</span></p>
+          <p>Expenses: ₹<span id="total-expenses">0</span></p>
+          <p>Balance: ₹<span id="total-savings">0</span></p>
         </div>
-    </section>
-    <section>
-        <h1>Your Account</h1>
 
-        <div id="account-summary">
-            <h2>Account Summary</h2>
-            <p>
-                Total Income: ₹<span id="total-income">0</span>
-            </p>
-            <p>
-                Total Expenses: ₹<span id="total-expenses">0</span>
-            </p>
-
-            <p>
-                Total Savings: ₹<span id="total-savings">0</span>
-            </p>
+        <div class="card">
+          <h3>Recent Transactions</h3>
+          <div id="transaction-history"></div>
+          <button id="load-more">See More</button>
         </div>
-    </section>
-    <section>
-        <h1>Transaction History</h1>
-        <div id="transaction-history">
-            <!-- Transactions will be listed here -->
-        </div>
-    </section>
-    <button id="load-more">See More</button>
 
-    <script src="script.js"></script>
+      </main>
     </div>
-</body>
+  </div>
 
+  <!-- INCOME MODAL -->
+  <div class="modal hidden" id="income-modal">
+    <div class="modal-box">
+      <h3>Add Income</h3>
+      <input id="income-amount" type="number" placeholder="Amount" />
+      <input id="income-date" type="date" />
+      <input id="income-description" type="text" placeholder="Description" />
+      <button id="submit-income">Add</button>
+      <button class="close-modal">Cancel</button>
+    </div>
+  </div>
+
+  <!-- EXPENSE MODAL -->
+  <div class="modal hidden" id="expense-modal">
+    <div class="modal-box">
+      <h3>Add Expense</h3>
+      <input id="expense-amount" type="number" placeholder="Amount" />
+      <input id="expense-date" type="date" />
+      <input id="expense-description" type="text" placeholder="Description" />
+
+      <h4>Category</h4>
+      <div class="categories">
+        <button id="food-btn">Food</button>
+        <button id="transport-btn">Transport</button>
+        <button id="entertainment-btn">Entertainment</button>
+        <button id="others-btn">Misc</button>
+      </div>
+
+      <button id="submit-expense">Add</button>
+      <button class="close-modal">Cancel</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
 </html>

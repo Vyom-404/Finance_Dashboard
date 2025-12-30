@@ -1,84 +1,116 @@
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
 }
 
 body {
-  margin: 0;
-  background: #f4f6f8;
-  color: #333;
+  background: #0f172a;
+  color: #e5e7eb;
 }
 
-.app-container {
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 20px;
+.dashboard {
+  min-height: 100vh;
 }
 
-section {
-  background: white;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+.topbar {
+  background: #020617;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-h1, h2, h4 {
-  margin-top: 0;
-}
-
-input {
+.profile-btn {
+  background: #1e293b;
+  border: none;
   padding: 8px;
-  margin: 6px 4px 6px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  border-radius: 50%;
+  color: white;
 }
 
-button {
-  padding: 8px 14px;
+.content {
+  display: flex;
+}
+
+.sidebar {
+  width: 220px;
+  padding: 20px;
+  background: #020617;
+}
+
+.sidebar button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: #38bdf8;
   border: none;
   border-radius: 6px;
-  background: #2563eb;
-  color: white;
-  cursor: pointer;
+  font-weight: bold;
 }
 
-button:hover {
-  background: #1e40af;
+.main {
+  flex: 1;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
-#expenses button {
-  margin-right: 6px;
-  margin-top: 6px;
-}
-
-button.active {
-  background: #16a34a;
-}
-
-#account-summary p {
-  font-size: 18px;
-  margin: 8px 0;
+.card {
+  background: #020617;
+  padding: 20px;
+  border-radius: 10px;
 }
 
 #transaction-history div {
-  padding: 10px;
+  background: #020617;
+  padding: 8px;
   margin-bottom: 8px;
-  background: #f9fafb;
-  border-left: 4px solid #2563eb;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-#transaction-history div:nth-child(even) {
-  background: #eef2ff;
+  border-left: 4px solid;
 }
 
 #load-more {
   margin-top: 10px;
-  background: #6b7280;
+  padding: 8px;
+  background: #38bdf8;
+  border: none;
+  border-radius: 5px;
 }
 
-#load-more:hover {
-  background: #374151;
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  background: #020617;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+.modal-box input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+}
+
+.modal-box button {
+  margin-top: 10px;
+  padding: 8px;
+  width: 100%;
+}
+
+.categories button.active {
+  background: #38bdf8;
+}
+
+.hidden {
+  display: none;
 }

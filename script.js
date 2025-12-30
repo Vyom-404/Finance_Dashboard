@@ -1,164 +1,125 @@
 let transactions = [];
-const incomeAmount = document.getElementById('income-amount');
-const expenseAmount = document.getElementById('expense-amount');
-const incomebtn = document.getElementById('add-income-btn');
-const expensebtn = document.getElementById('add-expense-btn');
-const expenseDate = document.getElementById('expense-date');
-const expenseDesc = document.getElementById('expense-description');
-const incomeDate = document.getElementById('income-date');
-const incomeDesc = document.getElementById('income-description');
-const totalIncome = document.getElementById('total-income');
-const totalExpense = document.getElementById('total-expenses');
-const balance = document.getElementById('total-savings');
-const transactionHistory = document.getElementById('transaction-history');
-const savedData = localStorage.getItem("transactions");
-let visibleTransactionscount = 5;
-const loadMoreBtn = document.getElementById('load-more');
+let visibleCount = 5;
 let selectedCategory = null;
-const categoryButtons = document.querySelectorAll('#food-btn, #transport-btn, #entertainment-btn, #others-btn');
 
-if (savedData) {
-    transactions = JSON.parse(savedData);
-    updateAccountSummary();
-    getTransactionhistory();
+const saved = localStorage.getItem("transactions");
+if (saved) transactions = JSON.parse(saved);
+
+const incomeModal = document.getElementById("income-modal");
+const expenseModal = document.getElementById("expense-modal");
+
+document.getElementById("add-income-btn").onclick = () =>
+  incomeModal.classList.remove("hidden");
+
+document.getElementById("add-expense-btn").onclick = () =>
+  expenseModal.classList.remove("hidden");
+
+const closeBtns = document.querySelectorAll(".close-modal");
+for (let i = 0; i < closeBtns.length; i++) {
+  closeBtns[i].onclick = () => {
+    incomeModal.classList.add("hidden");
+    expenseModal.classList.add("hidden");
+  };
 }
 
-incomebtn.addEventListener("click", function () {
-    const amount = Number(incomeAmount.value);
-    const date = incomeDate.value;
-    const description = incomeDesc.value;
+/* CATEGORY BUTTONS */
+const cats = document.querySelectorAll(
+  "#food-btn, #transport-btn, #entertainment-btn, #others-btn"
+);
 
-    if (amount <= 0) {
-        alert("Please enter a valid value");
-        return;
-    }
-    if (!date || !description) {
-        alert("Fill all fields");
-        return;
-    }
-    const transaction = {
-        type: 'income',
-        amount: amount,
-        date: date,
-        description: description
-    };
-    transactions.push(transaction);
-    localStorage.setItem("transactions", JSON.stringify(transactions));
-    visibleTransactionscount = 5;
-    incomeAmount.value = '';
-    incomeDate.value = '';
-    incomeDesc.value = '';
-    updateAccountSummary();
-    getTransactionhistory();
-});
-
-expensebtn.addEventListener("click", function () {
-    const amount = Number(expenseAmount.value);
-    const date = expenseDate.value;
-    const description = expenseDesc.value;
-    if (amount <= 0) {
-        alert("Please enter a valid value");
-        return;
-    }
-    if (!date || !description) {
-        alert("Fill all fields");
-        return;
-    }
-    if (selectedCategory === null) {
-    alert("Please select a category");
-    return;
-    }
-    const transaction = {
-        type: 'expense',
-        amount: amount,
-        date: date,
-        description: description,
-        category: selectedCategory
-    };
-    transactions.push(transaction);
-    localStorage.setItem("transactions", JSON.stringify(transactions));
-    selectedCategory = null;
-    for (let i = 0; i < categoryButtons.length; i++) {
-        categoryButtons[i].classList.remove("active");
-    }
-    visibleTransactionscount = 5;
-    expenseAmount.value = '';
-    expenseDate.value = '';
-    expenseDesc.value = '';
-    updateAccountSummary();
-    getTransactionhistory();
-});
-
-function updateAccountSummary() {
-    let totalInc = 0;
-    let totalExp = 0;
-    for (let i = 0; i < transactions.length; i++) {
-        if (transactions[i].type === 'income') {
-            totalInc += transactions[i].amount;
-        }
-        if (transactions[i].type === 'expense') {
-            totalExp += transactions[i].amount;
-        }
-    }
-    totalIncome.textContent = totalInc;
-    totalExpense.textContent = totalExp;
-    balance.textContent = totalInc - totalExp;
+for (let i = 0; i < cats.length; i++) {
+  cats[i].onclick = () => {
+    for (let j = 0; j < cats.length; j++) cats[j].classList.remove("active");
+    cats[i].classList.add("active");
+    selectedCategory = cats[i].innerText;
+  };
 }
 
-function getTransactionhistory() {
-    transactionHistory.innerHTML = '';
-    let count = 0;
+/* ADD INCOME */
+document.getElementById("submit-income").onclick = () => {
+  const amount = Number(document.getElementById("income-amount").value);
+  const date = document.getElementById("income-date").value;
+  const desc = document.getElementById("income-description").value;
 
-    for (let i = transactions.length - 1; i >= 0; i--) {
-        if (count === visibleTransactionscount) {
-            break;
-        }
-        const t = transactions[i];
-        const item = document.createElement('div');
-        if (t.type === 'income') {
-            item.textContent = `Income: ₹${t.amount} | Date: ${t.date} | Description: ${t.description}`;
-        } else {
-            item.textContent = `Expense: ₹${t.amount} | Date: ${t.date} | Description: ${t.description} | Category: ${t.category}`;
-        }
-        transactionHistory.appendChild(item);
-        count++;
-    }
-    if (visibleTransactionscount >= transactions.length) {
-        loadMoreBtn.style.display = "none";
-    } else {
-        loadMoreBtn.style.display = "block";
-    }
+  if (!amount || !date || !desc) return alert("Fill all fields");
+
+  transactions.push({ type: "income", amount, date, desc });
+  localStorage.setItem("transactions", JSON.stringify(transactions));
+
+  incomeModal.classList.add("hidden");
+  visibleCount = 5;
+  updateUI();
+};
+
+/* ADD EXPENSE */
+document.getElementById("submit-expense").onclick = () => {
+  const amount = Number(document.getElementById("expense-amount").value);
+  const date = document.getElementById("expense-date").value;
+  const desc = document.getElementById("expense-description").value;
+
+  if (!amount || !date || !desc || !selectedCategory)
+    return alert("Fill all fields");
+
+  transactions.push({
+    type: "expense",
+    amount,
+    date,
+    desc,
+    category: selectedCategory
+  });
+
+  localStorage.setItem("transactions", JSON.stringify(transactions));
+
+  selectedCategory = null;
+  expenseModal.classList.add("hidden");
+  visibleCount = 5;
+  updateUI();
+};
+
+document.getElementById("load-more").onclick = () => {
+  visibleCount += 5;
+  renderHistory();
+};
+
+function updateUI() {
+  updateSummary();
+  renderHistory();
 }
 
-loadMoreBtn.addEventListener("click", function () {
-    visibleTransactionscount += 10;
-    getTransactionhistory();
-})
-
-for (let i = 0; i < categoryButtons.length; i++) {
-    categoryButtons[i].addEventListener("click", function () {
-        if (categoryButtons[i].classList.contains("active")) {
-            categoryButtons[i].classList.remove("active");
-            selectedCategory = null;
-            return;
-        }
-
-        for (let j = 0; j < categoryButtons.length; j++) {
-            categoryButtons[j].classList.remove("active");
-        }
-
-        categoryButtons[i].classList.add("active");
-
-        if (categoryButtons[i].id === "food-btn") {
-            selectedCategory = "Food";
-        } else if (categoryButtons[i].id === "transport-btn") {
-            selectedCategory = "Transport";
-        } else if (categoryButtons[i].id === "entertainment-btn") {
-            selectedCategory = "Entertainment";
-        } else if (categoryButtons[i].id === "others-btn") {
-            selectedCategory = "Misc";
-        }
-
-        console.log("Selected category:", selectedCategory);
-    });
+function updateSummary() {
+  let inc = 0, exp = 0;
+  for (let i = 0; i < transactions.length; i++) {
+    if (transactions[i].type === "income") inc += transactions[i].amount;
+    else exp += transactions[i].amount;
+  }
+  document.getElementById("total-income").innerText = inc;
+  document.getElementById("total-expenses").innerText = exp;
+  document.getElementById("total-savings").innerText = inc - exp;
 }
+
+function renderHistory() {
+  const box = document.getElementById("transaction-history");
+  box.innerHTML = "";
+
+  let count = 0;
+  for (let i = transactions.length - 1; i >= 0 && count < visibleCount; i--) {
+    const t = transactions[i];
+    const div = document.createElement("div");
+
+    div.style.borderLeftColor =
+      t.type === "income" ? "#22c55e" : "#ef4444";
+
+    div.innerText =
+      t.type === "income"
+        ? `Income ₹${t.amount} | ${t.date} | ${t.desc}`
+        : `Expense ₹${t.amount} | ${t.date} | ${t.desc} | ${t.category}`;
+
+    box.appendChild(div);
+    count++;
+  }
+
+  document.getElementById("load-more").style.display =
+    visibleCount >= transactions.length ? "none" : "block";
+}
+
+updateUI();
