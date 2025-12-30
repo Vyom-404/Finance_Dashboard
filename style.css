@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f4f6f8;
+  color: #333;
+}
+
+.app-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+section {
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+h1, h2, h4 {
+  margin-top: 0;
+}
+
+input {
+  padding: 8px;
+  margin: 6px 4px 6px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1e40af;
+}
+
+#expenses button {
+  margin-right: 6px;
+  margin-top: 6px;
+}
+
+button.active {
+  background: #16a34a;
+}
+
+#account-summary p {
+  font-size: 18px;
+  margin: 8px 0;
+}
+
+#transaction-history div {
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #f9fafb;
+  border-left: 4px solid #2563eb;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+#transaction-history div:nth-child(even) {
+  background: #eef2ff;
+}
+
+#load-more {
+  margin-top: 10px;
+  background: #6b7280;
+}
+
+#load-more:hover {
+  background: #374151;
+}
