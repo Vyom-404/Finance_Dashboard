@@ -3,6 +3,53 @@
 ## Project Overview
 This is a **Personal Finance Dashboard** web application that helps users track their income and expenses. Users can add transactions, categorize them, filter by type/month/year, and visualize their financial data through interactive charts.
 
+---
+
+## How to Run the Project
+
+### Prerequisites
+- A modern web browser (Chrome, Firefox, Safari, Edge)
+- No server or installation required!
+
+### Steps to Run
+
+1. **Download or Clone the Project**
+   ```bash
+   # If you have git
+   git clone <repository-url>
+   cd Finance_Dashboard_Project
+   
+   # Or simply download the files
+   ```
+
+2. **Open the Application**
+   - **Option 1**: Double-click on `index.html` file
+   - **Option 2**: Right-click on `index.html` → Open with → Choose your browser
+   - **Option 3**: Drag `index.html` into your browser window
+
+3. **That's it!** 
+   - The dashboard will load in your browser
+   - All your data will be saved automatically in your browser's local storage
+   - Your transactions will persist even after closing the browser
+
+### File Structure
+```
+Finance_Dashboard_Project/
+├── index.html          # Main HTML file
+├── script.js           # JavaScript logic
+├── style.css           # Styling and responsive design
+└── README.md           # This file
+```
+
+### Testing the Application
+- Add an income/expense transaction
+- Use filters to narrow down transactions
+- Toggle between different chart views
+- Click "Show More" to load additional transactions
+- Use the Reset button to clear all data
+
+---
+
 ## Features Implemented
 
 ### 1. **Transaction Management**
