@@ -16,7 +16,7 @@ This is a **Personal Finance Dashboard** web application that helps users track 
 1. **Download or Clone the Project**
    ```bash
    # If you have git
-   git clone <repository-url>
+   git clone https://github.com/Vyom-404/Finance_Dashboard
    cd Finance_Dashboard_Project
    
    # Or simply download the files
