@@ -18,7 +18,6 @@ This is a **Personal Finance Dashboard** web application that helps users track 
    # If you have git
    git clone https://github.com/Vyom-404/Finance_Dashboard
    cd Finance_Dashboard_Project
-   
    # Or simply download the files
    ```
 
@@ -31,6 +30,9 @@ This is a **Personal Finance Dashboard** web application that helps users track 
    - The dashboard will load in your browser
    - All your data will be saved automatically in your browser's local storage
    - Your transactions will persist even after closing the browser
+
+   ## 🌐 Live Demo
+👉 https://vyom-404.github.io/Finance_Dashboard/
 
 ### File Structure
 ```
