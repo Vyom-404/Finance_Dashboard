@@ -1,83 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personal Finance Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Dashboard</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/128/9382/9382189.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
-  <div class="dashboard">
 
-    <!-- TOP BAR -->
-    <header class="topbar">
-      <h2>💰 Personal Finance Dashboard</h2>
-      <button class="profile-btn">👤</button>
-    </header>
+<h1>Personal Finance Dashboard</h1>
 
-    <div class="content">
+<!-- Summary -->
+<div class="summary">
+    <div class="card income">
+        <h3>Income</h3>
+        <p id="totalIncome">₹0</p>
+    </div>
+    <div class="card expense">
+        <h3>Expense</h3>
+        <p id="totalExpense">₹0</p>
+    </div>
+    <div class="card balance">
+        <h3>Balance</h3>
+        <p id="balance">₹0</p>
+    </div>
+</div>
 
-      <!-- LEFT QUICK ACTIONS -->
-      <aside class="sidebar">
-        <h3>Quick Actions</h3>
-        <button id="add-income-btn">+ Add Income</button>
-        <button id="add-expense-btn">+ Add Expense</button>
-      </aside>
+<!-- Add Transaction -->
+<div class="form">
+    <input type="number" id="amount" placeholder="Amount">
 
-      <!-- MAIN GRID -->
-      <main class="main">
+    <select id="type">
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+    </select>
 
-        <div class="card">
-          <h3>Account Summary</h3>
-          <p>Income: ₹<span id="total-income">0</span></p>
-          <p>Expenses: ₹<span id="total-expenses">0</span></p>
-          <p>Balance: ₹<span id="total-savings">0</span></p>
+    <select id="category">
+        <option value="">Select Category</option>
+        <option value="Food">Food</option>
+        <option value="Bills">Bills</option>
+        <option value="Transport">Transport</option>
+        <option value="Others">Others</option>
+    </select>
+
+    <input type="date" id="date">
+    <button id="addBtn">Add</button>
+</div>
+
+<!-- Filters -->
+<div class="filter">
+    <span class="filter-title">Filters:</span>
+    <select id="filterType">
+        <option value="all">All</option>
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+    </select>
+
+    <select id="filterMonth">
+        <option value="all">All Months</option>
+        <option value="0">Jan</option>
+        <option value="1">Feb</option>
+        <option value="2">Mar</option>
+        <option value="3">Apr</option>
+        <option value="4">May</option>
+        <option value="5">Jun</option>
+        <option value="6">Jul</option>
+        <option value="7">Aug</option>
+        <option value="8">Sep</option>
+        <option value="9">Oct</option>
+        <option value="10">Nov</option>
+        <option value="11">Dec</option>
+    </select>
+
+    <select id="filterYear">
+        <option value="all">All Years</option>
+    </select>
+</div>
+
+<!-- Dashboard -->
+<div class="dashboard">
+    <div class="history">
+        <h2>Transaction History</h2>
+        <ul id="transactionList"></ul>
+        <p id="emptyState" class="empty">No transactions found</p>
+        <button id="showMoreBtn">Show More</button>
+    </div>
+
+    <div class="chart-box">
+        <div class="chart-header">
+            <h2 id="chartTitle">Expense Breakdown</h2>
+            <button id="toggleChartBtn">Show Income vs Expense</button>
         </div>
 
-        <div class="card">
-          <h3>Recent Transactions</h3>
-          <div id="transaction-history"></div>
-          <button id="load-more">See More</button>
+        <div class="chart-wrapper">
+            <canvas id="expenseChart"></canvas>
+            <canvas id="incomeExpenseChart" style="display:none;"></canvas>
         </div>
 
-      </main>
+        <p id="chartEmpty" class="empty">No data available</p>
     </div>
-  </div>
+</div>
 
-  <!-- INCOME MODAL -->
-  <div class="modal hidden" id="income-modal">
-    <div class="modal-box">
-      <h3>Add Income</h3>
-      <input id="income-amount" type="number" placeholder="Amount" />
-      <input id="income-date" type="date" />
-      <input id="income-description" type="text" placeholder="Description" />
-      <button id="submit-income">Add</button>
-      <button class="close-modal">Cancel</button>
-    </div>
-  </div>
+ <div class="box">
+        Reset 
+</div>
 
-  <!-- EXPENSE MODAL -->
-  <div class="modal hidden" id="expense-modal">
-    <div class="modal-box">
-      <h3>Add Expense</h3>
-      <input id="expense-amount" type="number" placeholder="Amount" />
-      <input id="expense-date" type="date" />
-      <input id="expense-description" type="text" placeholder="Description" />
+<script src="script.js"></script>
 
-      <h4>Category</h4>
-      <div class="categories">
-        <button id="food-btn">Food</button>
-        <button id="transport-btn">Transport</button>
-        <button id="entertainment-btn">Entertainment</button>
-        <button id="others-btn">Misc</button>
-      </div>
 
-      <button id="submit-expense">Add</button>
-      <button class="close-modal">Cancel</button>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
