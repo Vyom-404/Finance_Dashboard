@@ -5,12 +5,13 @@ let incomeExpenseChartObj = null;
 let visibleCount = 7;
 const STEP = 10;
 
-/* DOM */
+
+
 const amountInput = document.getElementById("amount");
 const typeInput = document.getElementById("type");
 const categoryInput = document.getElementById("category");
 const dateInput = document.getElementById("date");
-const addBtn = document.getElementById("addBtn");
+const transactionForm = document.getElementById("transactionForm");
 
 const filterType = document.getElementById("filterType");
 const filterMonth = document.getElementById("filterMonth");
@@ -31,26 +32,31 @@ const incomeExpenseCanvas = document.getElementById("incomeExpenseChart");
 const toggleChartBtn = document.getElementById("toggleChartBtn");
 const chartTitle = document.getElementById("chartTitle");
 
-/* Currency */
+
 function formatCurrency(amount) {
     return "₹" + amount.toLocaleString("en-IN");
 }
 
-/* Toggle category */
+
 typeInput.addEventListener("change", () => {
     categoryInput.style.display = typeInput.value === "income" ? "none" : "block";
     if (typeInput.value === "income") categoryInput.value = "";
 });
 
-/* Add Transaction */
-addBtn.addEventListener("click", () => {
+
+
+transactionForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
     const amount = Number(amountInput.value);
     const type = typeInput.value;
     const category = categoryInput.value;
     const date = dateInput.value;
 
-    if (!amount || !date) return alert("Fill all required fields");
-    if (type === "expense" && !category) return alert("Select category");
+    if (type === "expense" && !category) {
+        alert("Select category");
+        return;
+    }
 
     transactions.unshift({
         id: Date.now(),
@@ -60,14 +66,14 @@ addBtn.addEventListener("click", () => {
         date
     });
 
-    amountInput.value = "";
-    categoryInput.value = "";
-    dateInput.value = "";
+    transactionForm.reset();
+    categoryInput.style.display = "none";
 
     saveDataAndRender();
 });
 
-/* Delete (with confirmation — RESTORED) */
+
+
 transactionList.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete")) {
         const id = Number(e.target.dataset.id);
@@ -77,7 +83,7 @@ transactionList.addEventListener("click", (e) => {
     }
 });
 
-/* Filters */
+
 function applyFilters() {
     return transactions.filter(t => {
         const d = new Date(t.date);
@@ -88,7 +94,7 @@ function applyFilters() {
     });
 }
 
-/* Populate years ONLY when transactions change */
+
 function populateYears() {
     const years = [...new Set(
         transactions.map(t => new Date(t.date).getFullYear())
@@ -104,7 +110,7 @@ function populateYears() {
     });
 }
 
-/* Transactions */
+
 function renderTransactions() {
     const filtered = applyFilters();
     transactionList.innerHTML = "";
@@ -136,7 +142,7 @@ function renderTransactions() {
     showMoreBtn.style.display = visibleCount < filtered.length ? "block" : "none";
 }
 
-/* Summary */
+
 function updateSummary() {
     let income = 0, expense = 0;
     transactions.forEach(t => t.type === "income" ? income += t.amount : expense += t.amount);
@@ -146,7 +152,7 @@ function updateSummary() {
     balance.textContent = formatCurrency(income - expense);
 }
 
-/* Expense Pie Chart */
+
 function renderExpenseChart(filtered) {
     const map = {};
     filtered.filter(t => t.type === "expense")
@@ -169,7 +175,7 @@ function renderExpenseChart(filtered) {
     });
 }
 
-/* Income vs Expense Bar Chart */
+
 function renderIncomeExpenseChart(filtered) {
     let income = 0;
     let expense = 0;
@@ -195,7 +201,7 @@ function renderIncomeExpenseChart(filtered) {
     });
 }
 
-/* Toggle Charts */
+
 let showingExpense = true;
 
 toggleChartBtn.addEventListener("click", () => {
@@ -213,7 +219,7 @@ toggleChartBtn.addEventListener("click", () => {
         : "Show Expense Breakdown";
 });
 
-/* Render ONLY (filters) */
+
 function renderUI() {
     visibleCount = 7;
     const filtered = applyFilters();
@@ -224,14 +230,14 @@ function renderUI() {
     renderIncomeExpenseChart(filtered);
 }
 
-/* Save + Render (data changes only) */
+
 function saveDataAndRender() {
     localStorage.setItem("transactions", JSON.stringify(transactions));
     populateYears();
     renderUI();
 }
 
-/* Events */
+
 showMoreBtn.addEventListener("click", () => {
     visibleCount += STEP;
     renderTransactions();
@@ -241,12 +247,12 @@ filterType.addEventListener("change", renderUI);
 filterMonth.addEventListener("change", renderUI);
 filterYear.addEventListener("change", renderUI);
 
-/* INIT */
+
 categoryInput.style.display = "none";
 populateYears();
 renderUI();
 
-/* Reset (unchanged) */
+
 document.querySelector('.box').addEventListener('click', () => {
     if (!confirm("Are you sure you want to reset all data?")) return;
     localStorage.removeItem("transactions");

@@ -9,11 +9,12 @@ body {
     padding: 20px;
 }
 
-h1, h2 {
+h1,
+h2 {
     text-align: center;
 }
 
-/* SUMMARY */
+
 .summary {
     display: flex;
     gap: 20px;
@@ -27,12 +28,21 @@ h1, h2 {
     border-radius: 12px;
 }
 
-.income { border-left: 6px solid #22c55e; }
-.expense { border-left: 6px solid #ef4444; }
-.balance { border-left: 6px solid #3b82f6; }
+.income {
+    border-left: 6px solid #22c55e;
+}
 
-/* FORM & FILTER */
-.form, .filter {
+.expense {
+    border-left: 6px solid #ef4444;
+}
+
+.balance {
+    border-left: 6px solid #3b82f6;
+}
+
+
+.form,
+.filter {
     display: flex;
     gap: 12px;
     justify-content: center;
@@ -40,7 +50,8 @@ h1, h2 {
     margin: 20px 0;
 }
 
-input, select {
+input,
+select {
     padding: 10px;
     background: #121212;
     border: 1px solid #2a2a2a;
@@ -61,14 +72,15 @@ button {
     cursor: pointer;
 }
 
-/* DASHBOARD */
+
 .dashboard {
     display: flex;
     gap: 20px;
 }
 
-/* HISTORY */
-.history, .chart-box {
+
+.history,
+.chart-box {
     flex: 1;
     background: #121212;
     padding: 20px;
@@ -90,8 +102,13 @@ button {
     align-items: center;
 }
 
-.income-item { border-left: 5px solid #22c55e; }
-.expense-item { border-left: 5px solid #ef4444; }
+.income-item {
+    border-left: 5px solid #22c55e;
+}
+
+.expense-item {
+    border-left: 5px solid #ef4444;
+}
 
 .actions .delete {
     background: #ef4444;
@@ -106,7 +123,7 @@ button {
     color: #9ca3af;
 }
 
-/* CHART */
+
 .chart-box {
     display: flex;
     flex-direction: column;
@@ -129,7 +146,7 @@ button {
     font-size: 12px;
 }
 
-/* RESET */
+
 .box {
     position: absolute;
     top: 60px;
@@ -143,9 +160,7 @@ button {
     cursor: pointer;
 }
 
-/* =========================
-   TABLET (≤1024px)
-   ========================= */
+
 @media (max-width: 1024px) {
 
     body {
@@ -181,9 +196,7 @@ button {
 }
 
 
-/* =========================
-   MOBILE (≤640px)
-   ========================= */
+
 @media (max-width: 640px) {
 
     body {
@@ -247,7 +260,7 @@ button {
         height: 240px;
     }
 
-    /* Reset button becomes normal flow */
+
     .box {
         position: static;
         width: 100%;

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,107 +12,114 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
 
-<h1>Personal Finance Dashboard</h1>
+    <h1>Personal Finance Dashboard</h1>
 
-<!-- SUMMARY -->
-<div class="summary">
-    <div class="card income">
-        <h3>Income</h3>
-        <p id="totalIncome">₹0</p>
-    </div>
-    <div class="card expense">
-        <h3>Expense</h3>
-        <p id="totalExpense">₹0</p>
-    </div>
-    <div class="card balance">
-        <h3>Balance</h3>
-        <p id="balance">₹0</p>
-    </div>
-</div>
 
-<!-- ADD TRANSACTION -->
-<div class="form">
-    <input type="number" id="amount" placeholder="Amount">
-
-    <select id="type">
-        <option value="income">Income</option>
-        <option value="expense">Expense</option>
-    </select>
-
-    <select id="category">
-        <option value="">Select Category</option>
-        <option value="Food">Food</option>
-        <option value="Bills">Bills</option>
-        <option value="Transport">Transport</option>
-        <option value="Others">Others</option>
-    </select>
-
-    <input type="date" id="date">
-    <button id="addBtn">Add</button>
-</div>
-
-<!-- FILTERS -->
-<div class="filter">
-    <span class="filter-title">Filters:</span>
-
-    <select id="filterType">
-        <option value="all">All</option>
-        <option value="income">Income</option>
-        <option value="expense">Expense</option>
-    </select>
-
-    <select id="filterMonth">
-        <option value="all">All Months</option>
-        <option value="0">Jan</option>
-        <option value="1">Feb</option>
-        <option value="2">Mar</option>
-        <option value="3">Apr</option>
-        <option value="4">May</option>
-        <option value="5">Jun</option>
-        <option value="6">Jul</option>
-        <option value="7">Aug</option>
-        <option value="8">Sep</option>
-        <option value="9">Oct</option>
-        <option value="10">Nov</option>
-        <option value="11">Dec</option>
-    </select>
-
-    <select id="filterYear">
-        <option value="all">All Years</option>
-    </select>
-</div>
-
-<!-- DASHBOARD -->
-<div class="dashboard">
-
-    <!-- HISTORY -->
-    <div class="history">
-        <h2>Transaction History</h2>
-        <ul id="transactionList"></ul>
-        <p id="emptyState" class="empty">No transactions found</p>
-        <button id="showMoreBtn">Show More</button>
+    <div class="summary">
+        <div class="card income">
+            <h3>Income</h3>
+            <p id="totalIncome">₹0</p>
+        </div>
+        <div class="card expense">
+            <h3>Expense</h3>
+            <p id="totalExpense">₹0</p>
+        </div>
+        <div class="card balance">
+            <h3>Balance</h3>
+            <p id="balance">₹0</p>
+        </div>
     </div>
 
-    <!-- CHARTS -->
-    <div class="chart-box">
-        <div class="chart-header">
-            <h2 id="chartTitle">Expense Breakdown</h2>
-            <button id="toggleChartBtn">Show Income vs Expense</button>
+
+    <form id="transactionForm">
+        <div class="form">
+
+            <input type="number" id="amount" placeholder="Amount" min="1" step="1" required>
+
+            <select id="type">
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+            </select>
+
+            <select id="category">
+                <option value="">Select Category</option>
+                <option value="Food">Food</option>
+                <option value="Bills">Bills</option>
+                <option value="Transport">Transport</option>
+                <option value="Others">Others</option>
+            </select>
+
+            <input type="date" id="date" required>
+
+            <button type="submit" id="addBtn">Add</button>
+
+        </div>
+    </form>
+
+
+    <div class="filter">
+        <span class="filter-title">Filters:</span>
+
+        <select id="filterType">
+            <option value="all">All</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+        </select>
+
+        <select id="filterMonth">
+            <option value="all">All Months</option>
+            <option value="0">Jan</option>
+            <option value="1">Feb</option>
+            <option value="2">Mar</option>
+            <option value="3">Apr</option>
+            <option value="4">May</option>
+            <option value="5">Jun</option>
+            <option value="6">Jul</option>
+            <option value="7">Aug</option>
+            <option value="8">Sep</option>
+            <option value="9">Oct</option>
+            <option value="10">Nov</option>
+            <option value="11">Dec</option>
+        </select>
+
+        <select id="filterYear">
+            <option value="all">All Years</option>
+        </select>
+    </div>
+
+
+    <div class="dashboard">
+
+
+        <div class="history">
+            <h2>Transaction History</h2>
+            <ul id="transactionList"></ul>
+            <p id="emptyState" class="empty">No transactions found</p>
+            <button id="showMoreBtn">Show More</button>
         </div>
 
-        <div class="chart-wrapper">
-            <canvas id="expenseChart"></canvas>
-            <canvas id="incomeExpenseChart" style="display:none;"></canvas>
+
+        <div class="chart-box">
+            <div class="chart-header">
+                <h2 id="chartTitle">Expense Breakdown</h2>
+                <button id="toggleChartBtn">Show Income vs Expense</button>
+            </div>
+
+            <div class="chart-wrapper">
+                <canvas id="expenseChart"></canvas>
+                <canvas id="incomeExpenseChart" style="display:none;"></canvas>
+            </div>
+
+            <p id="chartEmpty" class="empty">No data available</p>
         </div>
-
-        <p id="chartEmpty" class="empty">No data available</p>
     </div>
-</div>
 
-<div class="box">Reset</div>
+    <div class="box">Reset</div>
 
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>
