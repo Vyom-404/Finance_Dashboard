@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personal Finance Dashboard</title>
+
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/128/9382/9382189.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
 <h1>Personal Finance Dashboard</h1>
 
-<!-- Summary -->
+<!-- SUMMARY -->
 <div class="summary">
     <div class="card income">
         <h3>Income</h3>
@@ -29,7 +31,7 @@
     </div>
 </div>
 
-<!-- Add Transaction -->
+<!-- ADD TRANSACTION -->
 <div class="form">
     <input type="number" id="amount" placeholder="Amount">
 
@@ -50,9 +52,10 @@
     <button id="addBtn">Add</button>
 </div>
 
-<!-- Filters -->
+<!-- FILTERS -->
 <div class="filter">
     <span class="filter-title">Filters:</span>
+
     <select id="filterType">
         <option value="all">All</option>
         <option value="income">Income</option>
@@ -80,8 +83,10 @@
     </select>
 </div>
 
-<!-- Dashboard -->
+<!-- DASHBOARD -->
 <div class="dashboard">
+
+    <!-- HISTORY -->
     <div class="history">
         <h2>Transaction History</h2>
         <ul id="transactionList"></ul>
@@ -89,6 +94,7 @@
         <button id="showMoreBtn">Show More</button>
     </div>
 
+    <!-- CHARTS -->
     <div class="chart-box">
         <div class="chart-header">
             <h2 id="chartTitle">Expense Breakdown</h2>
@@ -104,12 +110,8 @@
     </div>
 </div>
 
- <div class="box">
-        Reset 
-</div>
+<div class="box">Reset</div>
 
 <script src="script.js"></script>
-
-
 </body>
 </html>

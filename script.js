@@ -31,25 +31,27 @@ const incomeExpenseCanvas = document.getElementById("incomeExpenseChart");
 const toggleChartBtn = document.getElementById("toggleChartBtn");
 const chartTitle = document.getElementById("chartTitle");
 
-/* Currency */
-function formatCurrency(amount) {
-    return "₹" + amount.toLocaleString("en-IN");
-}
+/* Utils */
+const formatCurrency = amt => "₹" + amt.toLocaleString("en-IN");
 
-/* Toggle category */
+/* Category toggle */
+categoryInput.style.display = "none";
+categoryInput.disabled = true;
+
 typeInput.addEventListener("change", () => {
-    categoryInput.style.display = typeInput.value === "income" ? "none" : "block";
-    if (typeInput.value === "income") categoryInput.value = "";
+    const isIncome = typeInput.value === "income";
+    categoryInput.style.display = isIncome ? "none" : "block";
+    categoryInput.disabled = isIncome;
 });
 
-/* Add Transaction */
+/* Add */
 addBtn.addEventListener("click", () => {
     const amount = Number(amountInput.value);
     const type = typeInput.value;
     const category = categoryInput.value;
     const date = dateInput.value;
 
-    if (!amount || !date) return alert("Fill all required fields");
+    if (!amount || !date) return alert("Fill all fields");
     if (type === "expense" && !category) return alert("Select category");
 
     transactions.unshift({
@@ -61,20 +63,18 @@ addBtn.addEventListener("click", () => {
     });
 
     amountInput.value = "";
-    categoryInput.value = "";
     dateInput.value = "";
+    categoryInput.value = "";
 
     saveAndRender();
 });
 
-/* Delete (event delegation) */
-transactionList.addEventListener("click", (e) => {
-    if (e.target.classList.contains("delete")) {
-        const id = Number(e.target.dataset.id);
-        if (!confirm("Delete this transaction?")) return;
-        transactions = transactions.filter(t => t.id !== id);
-        saveAndRender();
-    }
+/* Delete */
+transactionList.addEventListener("click", e => {
+    if (!e.target.classList.contains("delete")) return;
+    const id = Number(e.target.dataset.id);
+    transactions = transactions.filter(t => t.id !== id);
+    saveAndRender();
 });
 
 /* Filters */
@@ -82,34 +82,38 @@ function applyFilters() {
     return transactions.filter(t => {
         const d = new Date(t.date);
         if (filterType.value !== "all" && t.type !== filterType.value) return false;
-        if (filterMonth.value !== "all" && d.getMonth().toString() !== filterMonth.value) return false;
-        if (filterYear.value !== "all" && d.getFullYear().toString() !== filterYear.value) return false;
+        if (filterMonth.value !== "all" && d.getMonth() != filterMonth.value) return false;
+        if (filterYear.value !== "all" && d.getFullYear() != filterYear.value) return false;
         return true;
     });
 }
 
-/* Transactions */
+/* Years */
+function populateYears() {
+    const years = [...new Set(transactions.map(t => new Date(t.date).getFullYear()))];
+    filterYear.innerHTML = `<option value="all">All Years</option>`;
+    years.sort((a,b)=>b-a).forEach(y=>{
+        filterYear.innerHTML += `<option value="${y}">${y}</option>`;
+    });
+}
+
+/* Render list */
 function renderTransactions() {
-    const filtered = applyFilters();
+    const data = applyFilters();
     transactionList.innerHTML = "";
 
-    if (!filtered.length) {
+    if (!data.length) {
         emptyState.style.display = "block";
         showMoreBtn.style.display = "none";
         return;
     }
-
     emptyState.style.display = "none";
 
-    filtered.slice(0, visibleCount).forEach(t => {
+    data.slice(0, visibleCount).forEach(t => {
         const li = document.createElement("li");
-        li.classList.add(t.type === "income" ? "income-item" : "expense-item");
-
+        li.className = t.type === "income" ? "income-item" : "expense-item";
         li.innerHTML = `
-            <span>
-                ${t.type === "expense" ? t.category + " | " : "Income | "}
-                ${t.date} | ${formatCurrency(t.amount)}
-            </span>
+            <span>${t.type === "expense" ? t.category : "Income"} | ${t.date} | ${formatCurrency(t.amount)}</span>
             <div class="actions">
                 <button class="delete" data-id="${t.id}">Delete</button>
             </div>
@@ -117,139 +121,92 @@ function renderTransactions() {
         transactionList.appendChild(li);
     });
 
-    showMoreBtn.style.display = visibleCount < filtered.length ? "block" : "none";
+    showMoreBtn.style.display = visibleCount < data.length ? "block" : "none";
 }
 
 /* Summary */
 function updateSummary() {
     let income = 0, expense = 0;
     transactions.forEach(t => t.type === "income" ? income += t.amount : expense += t.amount);
-
     totalIncome.textContent = formatCurrency(income);
     totalExpense.textContent = formatCurrency(expense);
     balance.textContent = formatCurrency(income - expense);
 }
 
-/* Expense Pie Chart */
-function renderExpenseChart(filtered) {
+/* Charts */
+function renderExpenseChart(data) {
     const map = {};
-    filtered.filter(t => t.type === "expense")
-        .forEach(t => map[t.category] = (map[t.category] || 0) + t.amount);
+    data.filter(t=>t.type==="expense").forEach(t=>map[t.category]=(map[t.category]||0)+t.amount);
 
     if (expenseChartObj) expenseChartObj.destroy();
-    if (!Object.keys(map).length) return;
+    if (!Object.keys(map).length) {
+        chartEmpty.style.display="block";
+        return;
+    }
+    chartEmpty.style.display="none";
 
-    expenseChartObj = new Chart(expenseCanvas, {
-        type: "pie",
-        data: {
-            labels: Object.keys(map),
-            datasets: [{ data: Object.values(map) }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
+    expenseChartObj = new Chart(expenseCanvas,{
+        type:"pie",
+        data:{labels:Object.keys(map),datasets:[{data:Object.values(map)}]},
+        options:{responsive:true,maintainAspectRatio:false}
     });
 }
 
-/* Income vs Expense Bar Chart */
-function renderIncomeExpenseChart(filtered) {
-    let income = 0;
-    let expense = 0;
-
-    filtered.forEach(t => {
-        if (t.type === "income") income += t.amount;
-        else expense += t.amount;
-    });
+function renderIncomeExpenseChart(data) {
+    let inc=0, exp=0;
+    data.forEach(t=>t.type==="income"?inc+=t.amount:exp+=t.amount);
 
     if (incomeExpenseChartObj) incomeExpenseChartObj.destroy();
+    if (!inc && !exp) return;
 
-    // If no data at all, don’t draw chart
-    if (income === 0 && expense === 0) return;
-
-    incomeExpenseChartObj = new Chart(incomeExpenseCanvas, {
-        type: "bar",
-        data: {
-            labels: ["Amount"], 
-            datasets: [
-                {
-                    label: "Income",
-                    data: [income],
-                    backgroundColor: "#22c55e"
-                },
-                {
-                    label: "Expense",
-                    data: [expense],
-                    backgroundColor: "#ef4444"
-                }
+    incomeExpenseChartObj = new Chart(incomeExpenseCanvas,{
+        type:"bar",
+        data:{
+            labels:["Amount"],
+            datasets:[
+                {label:"Income",data:[inc],backgroundColor:"#22c55e"},
+                {label:"Expense",data:[exp],backgroundColor:"#ef4444"}
             ]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'right',
-                    align: 'center',
-                    padding: {
-                        left: 20
-                    },
-                    labels: {
-                        color: "#ffffff",
-                        padding: 15
-                    }
-                }
-            }
-        }
+        options:{responsive:true,maintainAspectRatio:false}
     });
 }
 
-/* Toggle Charts */
+/* Toggle */
 let showingExpense = true;
-
-toggleChartBtn.addEventListener("click", () => {
-    showingExpense = !showingExpense;
-
-    expenseCanvas.style.display = showingExpense ? "block" : "none";
-    incomeExpenseCanvas.style.display = showingExpense ? "none" : "block";
-
-    chartTitle.textContent = showingExpense
-        ? "Expense Breakdown"
-        : "Income vs Expense";
-
-    toggleChartBtn.textContent = showingExpense
-        ? "Show Income vs Expense"
-        : "Show Expense Breakdown";
+toggleChartBtn.addEventListener("click",()=>{
+    showingExpense=!showingExpense;
+    expenseCanvas.style.display=showingExpense?"block":"none";
+    incomeExpenseCanvas.style.display=showingExpense?"none":"block";
+    chartTitle.textContent=showingExpense?"Expense Breakdown":"Income vs Expense";
+    toggleChartBtn.textContent=showingExpense?"Show Income vs Expense":"Show Expense Breakdown";
 });
 
-/* Save & Render */
+/* Save */
 function saveAndRender() {
     localStorage.setItem("transactions", JSON.stringify(transactions));
     visibleCount = 7;
-
+    populateYears();
     const filtered = applyFilters();
-
     renderTransactions();
     updateSummary();
-
     renderExpenseChart(filtered);
     renderIncomeExpenseChart(filtered);
 }
 
 /* Events */
-showMoreBtn.addEventListener("click", () => {
-    visibleCount += STEP;
-    renderTransactions();
-});
+showMoreBtn.onclick = () => { visibleCount += STEP; renderTransactions(); };
+filterType.onchange = saveAndRender;
+filterMonth.onchange = saveAndRender;
+filterYear.onchange = saveAndRender;
 
-filterType.addEventListener("change", saveAndRender);
-filterMonth.addEventListener("change", saveAndRender);
-filterYear.addEventListener("change", saveAndRender);
-
-/* INIT */
-categoryInput.style.display = "none";
-saveAndRender();
-
-document.querySelector('.box').addEventListener('click', () => {
-    if (!confirm("Are you sure you want to reset all data?")) return;
+/* Reset */
+document.querySelector(".box").onclick = () => {
+    if (!confirm("Reset all data?")) return;
     localStorage.removeItem("transactions");
     transactions = [];
     saveAndRender();
-});
+};
+
+/* INIT */
+saveAndRender();
