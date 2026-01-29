@@ -1,11 +1,12 @@
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
 let expenseChartObj = null;
 let incomeExpenseChartObj = null;
+// showhistory
 
 let visibleCount = 7;
 const STEP = 10;
 
-
+//  DOM Elements
 
 const amountInput = document.getElementById("amount");
 const typeInput = document.getElementById("type");
@@ -32,12 +33,12 @@ const incomeExpenseCanvas = document.getElementById("incomeExpenseChart");
 const toggleChartBtn = document.getElementById("toggleChartBtn");
 const chartTitle = document.getElementById("chartTitle");
 
-
+// Currency Format
 function formatCurrency(amount) {
     return "₹" + amount.toLocaleString("en-IN");
 }
 
-
+// Event Listeners
 typeInput.addEventListener("change", () => {
     categoryInput.style.display = typeInput.value === "income" ? "none" : "block";
     if (typeInput.value === "income") categoryInput.value = "";
@@ -152,7 +153,7 @@ function updateSummary() {
     balance.textContent = formatCurrency(income - expense);
 }
 
-
+// Charts
 function renderExpenseChart(filtered) {
     const map = {};
     filtered.filter(t => t.type === "expense")
@@ -175,7 +176,7 @@ function renderExpenseChart(filtered) {
     });
 }
 
-
+// Income vs Expense Chart
 function renderIncomeExpenseChart(filtered) {
     let income = 0;
     let expense = 0;
@@ -201,7 +202,7 @@ function renderIncomeExpenseChart(filtered) {
     });
 }
 
-
+// Toggle Charts
 let showingExpense = true;
 
 toggleChartBtn.addEventListener("click", () => {
@@ -219,7 +220,7 @@ toggleChartBtn.addEventListener("click", () => {
         : "Show Expense Breakdown";
 });
 
-
+// Render
 function renderUI() {
     visibleCount = 7;
     const filtered = applyFilters();
@@ -252,7 +253,7 @@ categoryInput.style.display = "none";
 populateYears();
 renderUI();
 
-
+// Reset Data
 document.querySelector('.box').addEventListener('click', () => {
     if (!confirm("Are you sure you want to reset all data?")) return;
     localStorage.removeItem("transactions");

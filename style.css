@@ -1,3 +1,6 @@
+
+ 
+
 * {
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
@@ -160,6 +163,7 @@ button {
     cursor: pointer;
 }
 
+/* media queries */
 
 @media (max-width: 1024px) {
 
